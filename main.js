@@ -1,48 +1,77 @@
-const electron = require('electron');
-const app = electron.app;  // Module to control application life.
-const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
+// const electron = require('electron');
+const express = require('express')
+const mysql = require('mssql');
+const PORT = 3001;
 
-const path = require('path');
-const url = require('url');
+const app = express();
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the javascript object is GCed.
-let mainWindow;
+const sqlConfig = {
+  server: "localhost",
+  user: "sa",
+  password: "sqlserver@123",
+  database: 'ExperiaDB'
+};
 
-// Quit when all windows are closed.
-app.on('window-all-closed', () => {
-  if (process.platform != 'darwin')
-    app.quit();
-});
+app.get('/',function(req,res){
+  let connection = sql.connect(sqlConfig,(err) => {
+    if(err){
+      console.log(err)
+    }
+    else
+    {
+      res.send('DB Connected!')
+    }
+  })
+})
 
-function createWindow() {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({ width: 960, height: 660 });
+app.listen(PORT, function(){
+  console.log(`Server started at ${PORT}`)
+})
 
-  // and load the index.html of the app.
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
+// const app = electron.app;  // Module to control application life.
+// const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', () => {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null;
-  });
-}
+// const path = require('path');
+// const url = require('url');
 
-// This method will be called when atom-shell has done everything
-// initialization and ready for creating browser windows.
-app.on('ready', createWindow);
+// // Keep a global reference of the window object, if you don't, the window will
+// // be closed automatically when the javascript object is GCed.
+// let mainWindow;
 
-app.on('activate', function () {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
+// // Quit when all windows are closed.
+// app.on('window-all-closed', () => {
+//   if (process.platform != 'darwin')
+//     app.quit();
+// });
+
+// function createWindow() {
+//   // Create the browser window.
+//   mainWindow = new BrowserWindow({ width: 960, height: 660 });
+
+//   // and load the index.html of the app.
+//   mainWindow.loadURL(url.format({
+//     pathname: path.join(__dirname, 'index.html'),
+//     protocol: 'file:',
+//     slashes: true
+//   }));
+
+//   // Emitted when the window is closed.
+//   mainWindow.on('closed', () => {
+//     // Dereference the window object, usually you would store windows
+//     // in an array if your app supports multi windows, this is the time
+//     // when you should delete the corresponding element.
+//     mainWindow = null;
+//   });
+// }
+
+// // This method will be called when atom-shell has done everything
+// // initialization and ready for creating browser windows.
+// app.on('ready', createWindow);
+
+// app.on('activate', function () {
+//   // On OS X it's common to re-create a window in the app when the
+//   // dock icon is clicked and there are no other windows open.
+//   if (mainWindow === null) {
+//     createWindow();
+//   }
+// });
